@@ -1,0 +1,23 @@
+<div class="header">
+  <%= render "shared/header" %>
+</div>
+
+<div class="main-banner">
+  <div class="container">
+    <h1 class="banner-title">人生を変えるフリマアプリ</h1>
+    <p class="banner-subtitle">FURIMAはだれでもかんたんに出品・購入できるフリマアプリです</p>
+    <div class="store-links">
+      <%= link_to image_tag("app-store.svg", class: "store-button"), "#" %>
+      <%= link_to image_tag("google-play.png", class: "store-button"), "#" %>
+    </div>
+  </div>
+</div>
+
+<div class="main-content">
+  <div class="container">
+    <h2>FURIMAが選ばれる3つの理由</h2>
+    <!-- ここに他のコンテンツが続きます -->
+  </div>
+</div>
+
+<%= render "shared/footer" %>
