@@ -1,0 +1,59 @@
+@startuml
+!define table(x) class x << (T,#FFAAAA) >>
+
+' Define the tables
+table(users) {
+  +id (PK)
+  --
+  nickname : string
+  email : string
+  encrypted_password : string
+  created_at : datetime
+  updated_at : datetime
+}
+
+table(items) {
+  +id (PK)
+  --
+  name : string
+  description : text
+  price : integer
+  category_id : integer (FK)
+  condition_id : integer (FK)
+  shipping_cost_id : integer (FK)
+  shipping_day_id : integer (FK)
+  user_id : integer (FK)
+  created_at : datetime
+  updated_at : datetime
+}
+
+table(orders) {
+  +id (PK)
+  --
+  user_id : integer (FK)
+  item_id : integer (FK)
+  created_at : datetime
+  updated_at : datetime
+}
+
+table(addresses) {
+  +id (PK)
+  --
+  order_id : integer (FK)
+  postal_code : string
+  prefecture_id : integer (FK)
+  city : string
+  address : string
+  building : string
+  phone_number : string
+  created_at : datetime
+  updated_at : datetime
+}
+
+' Define relationships
+users ||--o{ items : "has_many"
+users ||--o{ orders : "has_many"
+items ||--o{ orders : "has_one"
+orders ||--o{ addresses : "has_one"
+
+@enduml
