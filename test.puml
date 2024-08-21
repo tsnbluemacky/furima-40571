@@ -1,12 +1,15 @@
 @startuml
 !define table(x) class x << (T,#FFAAAA) >>
 
-' Define the tables
+' Define the tables without id(PK), created_at, updated_at
 table(users) {
   --
   nickname : string
-  email : string
+  email : string, unique: true
   encrypted_password : string
+  name : string, null: false
+  profile : text
+  birthday : date
 }
 
 table(items) {
@@ -14,10 +17,10 @@ table(items) {
   name : string
   description : text
   price : integer
-  category_id : integer (FK)
-  condition_id : integer (FK)
-  shipping_cost_id : integer (FK)
-  shipping_day_id : integer (FK)
+  category_id : integer
+  condition_id : integer
+  shipping_cost_id : integer
+  shipping_day_id : integer
   user_id : integer (FK)
 }
 
@@ -29,9 +32,9 @@ table(orders) {
 
 table(addresses) {
   --
-  order_id : integer (FK)
+  order : references, null: false, foreign_key: true
   postal_code : string
-  prefecture_id : integer (FK)
+  prefecture_id : integer
   city : string
   address : string
   building : string

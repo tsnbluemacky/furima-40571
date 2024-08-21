@@ -3,13 +3,17 @@
 | Column             | Type   | Options     |
 | ------------------ | ------ | ----------- |
 | nickname           | string | null: false |
-| email              | string | null: false |
+| email              | string | null: false, unique: true |
 | encrypted_password | string | null: false |
+| name               | string | null: false |  <!-- 追加例 -->
+| profile            | text   |             |  <!-- 追加例 -->
+| birthday           | date   |             |  <!-- 追加例 -->
 
 ### Association
 
 - has_many :items
 - has_many :orders
+
 
 ## items テーブル
 
@@ -18,42 +22,21 @@
 | name             | string  | null: false |
 | description      | text    | null: false |
 | price            | integer | null: false |
-| category_id      | integer | null: false, foreign_key: true |
-| condition_id     | integer | null: false, foreign_key: true |
-| shipping_cost_id | integer | null: false, foreign_key: true |
-| shipping_day_id  | integer | null: false, foreign_key: true |
+| category_id      | integer | null: false |  <!-- foreign_key: true 削除 -->
+| condition_id     | integer | null: false |  <!-- foreign_key: true 削除 -->
+| shipping_cost_id | integer | null: false |  <!-- foreign_key: true 削除 -->
+| shipping_day_id  | integer | null: false |  <!-- foreign_key: true 削除 -->
 | user_id          | integer | null: false, foreign_key: true |
 
-### Association
-
-- belongs_to :user
-- has_one :order
-
-## orders テーブル
-
-| Column   | Type    | Options                       |
-| -------- | ------- | ----------------------------- |
-| user_id  | integer | null: false, foreign_key: true |
-| item_id  | integer | null: false, foreign_key: true |
-
-### Association
-
-- belongs_to :user
-- belongs_to :item
-- has_one :address
 
 ## addresses テーブル
 
-| Column        | Type    | Options                       |
-| ------------- | ------- | ----------------------------- |
-| order_id      | integer | null: false, foreign_key: true |
-| postal_code   | string  | null: false                   |
-| prefecture_id | integer | null: false, foreign_key: true |
-| city          | string  | null: false                   |
-| address       | string  | null: false                   |
-| building      | string  |                               |
-| phone_number  | string  | null: false                   |
-
-### Association
-
-- belongs_to :order
+| Column        | Type    | Options     |
+| ------------- | ------- | ----------- |
+| order         | references | null: false, foreign_key: true |
+| postal_code   | string  | null: false |
+| prefecture_id | integer | null: false |  <!-- カラム名統一 -->
+| city          | string  | null: false |
+| address       | string  | null: false |
+| building      | string  |             |
+| phone_number  | string  | null: false |
