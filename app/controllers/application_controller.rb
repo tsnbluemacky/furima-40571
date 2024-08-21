@@ -2,8 +2,8 @@ class ApplicationController < ActionController::Base
   # Deviseコントローラーの場合、追加のパラメータ設定を許可する
   before_action :configure_permitted_parameters, if: :devise_controller?
 
-  # Basic認証を有効にする
-  before_action :basic_auth
+  # Basic認証を有効にする（ただし、開発環境では無効）
+  before_action :basic_auth, if: -> { Rails.env.production? }
 
   private
 

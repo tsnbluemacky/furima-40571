@@ -18,6 +18,7 @@ gem 'devise' # ユーザー認証機能のためのGem
 gem 'active_hash' # モデルの代替として使用するためのGem
 
 group :development, :test do
+  gem 'rspec-rails', '~> 5.0.0' # RSpec for testing framework
   gem "debug", platforms: %i[ mri mingw x64_mingw ] # デバッグツール
 end
 
