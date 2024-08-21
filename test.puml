@@ -3,17 +3,13 @@
 
 ' Define the tables
 table(users) {
-  +id (PK)
   --
   nickname : string
   email : string
   encrypted_password : string
-  created_at : datetime
-  updated_at : datetime
 }
 
 table(items) {
-  +id (PK)
   --
   name : string
   description : text
@@ -23,21 +19,15 @@ table(items) {
   shipping_cost_id : integer (FK)
   shipping_day_id : integer (FK)
   user_id : integer (FK)
-  created_at : datetime
-  updated_at : datetime
 }
 
 table(orders) {
-  +id (PK)
   --
   user_id : integer (FK)
   item_id : integer (FK)
-  created_at : datetime
-  updated_at : datetime
 }
 
 table(addresses) {
-  +id (PK)
   --
   order_id : integer (FK)
   postal_code : string
@@ -46,8 +36,6 @@ table(addresses) {
   address : string
   building : string
   phone_number : string
-  created_at : datetime
-  updated_at : datetime
 }
 
 ' Define relationships
