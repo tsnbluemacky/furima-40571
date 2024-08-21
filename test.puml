@@ -1,0 +1,49 @@
+@startuml
+!define table(x) class x << (T,#FFAAAA) >>
+
+' Define the tables with consistent naming and formatting
+table(users) {
+  nickname : string
+  email : string <<unique>>
+  encrypted_password : string
+  last_name : string
+  first_name : string
+  last_name_kana : string
+  first_name_kana : string
+  birth_date : date
+}
+
+table(items) {
+  name : string
+  description : text
+  category_id : integer
+  condition_id : integer
+  shipping_charge_id : integer
+  ship_from_area_id : integer
+  shipping_day_id : integer
+  price : integer
+  user_id : references <<FK>>
+}
+
+table(orders) {
+  user_id : references <<FK>>
+  item_id : references <<FK>>
+}
+
+table(addresses) {
+  post_code : string
+  ship_from_area_id : integer
+  city : string
+  address : string
+  building : string
+  phone_number : string
+  order_id : references <<FK>>
+}
+
+' Define relationships with clearer notation
+users ||--o{ items : "has_many"
+users ||--o{ orders : "has_many"
+items ||--o{ orders : "has_one"
+orders ||--o{ addresses : "has_one"
+
+@enduml
