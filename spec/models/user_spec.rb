@@ -1,71 +1,107 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  describe 'validations' do
-    it 'is valid with valid attributes' do
-      user = User.new(
-        nickname: 'TestUser',
-        email: 'test@example.com',
-        password: 'password123',
-        password_confirmation: 'password123',
-        first_name: '太郎',
-        last_name: '山田',
-        first_name_kana: 'タロウ',
-        last_name_kana: 'ヤマダ',
-        birth_date: '2000-01-01'
-      )
-      expect(user).to be_valid
+  before do
+    @user = FactoryBot.build(:user)
+  end
+
+  context 'ユーザ登録ができる時' do
+    it '全ての属性が正しく設定されている場合、有効であること' do
+      expect(@user).to be_valid
+    end
+  end
+
+  context 'ユーザ登録ができない時' do
+    it 'ニックネームがない場合、無効であること' do
+      @user.nickname = nil
+      @user.valid?
+      expect(@user.errors[:nickname]).to include("can't be blank")
     end
 
-    it 'is invalid without a nickname' do
-      user = User.new(nickname: nil)
-      user.valid?
-      expect(user.errors[:nickname]).to include("can't be blank")
+    it '重複したメールアドレスがある場合、無効であること' do
+      duplicate_user = @user.dup
+      @user.save
+      duplicate_user.valid?
+      expect(duplicate_user.errors[:email]).to include('has already been taken')
     end
 
-    it 'is invalid with a duplicate email' do
-      User.create(
-        nickname: 'ExistingUser',
-        email: 'test@example.com',
-        password: 'password123',
-        password_confirmation: 'password123',
-        first_name: '太郎',
-        last_name: '山田',
-        first_name_kana: 'タロウ',
-        last_name_kana: 'ヤマダ',
-        birth_date: '2000-01-01'
-      )
-      user = User.new(
-        nickname: 'AnotherUser',
-        email: 'test@example.com',
-        password: 'password456',
-        password_confirmation: 'password456',
-        first_name: '次郎',
-        last_name: '鈴木',
-        first_name_kana: 'ジロウ',
-        last_name_kana: 'スズキ',
-        birth_date: '2000-02-02'
-      )
-      user.valid?
-      expect(user.errors[:email]).to include('has already been taken')
+    it '短すぎるパスワードの場合、無効であること' do
+      @user.password = @user.password_confirmation = 'short'
+      @user.valid?
+      expect(@user.errors[:password]).to include('is too short (minimum is 6 characters)')
     end
 
-    it 'is invalid with a short password' do
-      user = User.new(password: 'short', password_confirmation: 'short')
-      user.valid?
-      expect(user.errors[:password]).to include('is too short (minimum is 6 characters)')
+    it '数字だけのパスワードの場合、無効であること' do
+      @user.password = @user.password_confirmation = '123456'
+      @user.valid?
+      expect(@user.errors[:password]).to include('must include both letters and numbers')
     end
 
-    it 'is invalid with a password containing only numbers' do
-      user = User.new(password: '123456', password_confirmation: '123456')
-      user.valid?
-      expect(user.errors[:password]).to include('must include both letters and numbers')
+    it '英字だけのパスワードの場合、無効であること' do
+      @user.password = @user.password_confirmation = 'abcdef'
+      @user.valid?
+      expect(@user.errors[:password]).to include('must include both letters and numbers')
     end
 
-    it 'is invalid with a password containing only letters' do
-      user = User.new(password: 'abcdef', password_confirmation: 'abcdef')
-      user.valid?
-      expect(user.errors[:password]).to include('must include both letters and numbers')
+    it 'メールアドレスが不正な形式の場合、無効であること' do
+      @user.email = 'invalid_email'
+      @user.valid?
+      expect(@user.errors[:email]).to include('is invalid')
+    end
+
+    it '誕生日がない場合、無効であること' do
+      @user.birth_date = nil
+      @user.valid?
+      expect(@user.errors[:birth_date]).to include("can't be blank")
+    end
+
+    it '姓が全角でない場合、無効であること' do
+      @user.last_name = 'Yamada'
+      @user.valid?
+      expect(@user.errors[:last_name]).to include('is invalid. Input full-width characters')
+    end
+
+    it '名が全角でない場合、無効であること' do
+      @user.first_name = 'Taro'
+      @user.valid?
+      expect(@user.errors[:first_name]).to include('is invalid. Input full-width characters')
+    end
+
+    it '姓のカナが全角カタカナでない場合、無効であること' do
+      @user.last_name_kana = 'やまだ'
+      @user.valid?
+      expect(@user.errors[:last_name_kana]).to include('is invalid. Input full-width katakana characters')
+    end
+
+    it '名のカナが全角カタカナでない場合、無効であること' do
+      @user.first_name_kana = 'たろう'
+      @user.valid?
+      expect(@user.errors[:first_name_kana]).to include('is invalid. Input full-width katakana characters')
+    end
+
+    it 'パスワードとパスワード確認用が一致しない場合、無効であること' do
+      @user.password = 'password123'
+      @user.password_confirmation = 'differentpassword'
+      @user.valid?
+      expect(@user.errors[:password_confirmation]).to include("doesn't match Password")
+    end
+
+    it 'メールアドレスに@が含まれていない場合、無効であること' do
+      @user.email = 'invalidemail.com'
+      @user.valid?
+      expect(@user.errors[:email]).to include('is invalid')
+    end
+
+    it 'パスワードが空の場合、無効であること' do
+      @user.password = ''
+      @user.valid?
+      expect(@user.errors[:password]).to include("can't be blank")
+    end
+
+    it 'パスワード確認用が空の場合、無効であること' do
+      @user.password_confirmation = ''
+      @user.valid?
+      expect(@user.errors[:password_confirmation]).to include("can't be blank")
     end
   end
 end
