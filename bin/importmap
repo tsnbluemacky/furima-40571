@@ -2,3 +2,6 @@
 
 require_relative "../config/application"
 require "importmap/commands"
+
+pin "application", preload: true
+pin "price", to: "price.js"

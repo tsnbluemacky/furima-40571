@@ -5,7 +5,7 @@ class ItemsController < ApplicationController
   before_action :correct_user, only: [:edit, :update, :destroy]
 
   def index
-    @items = Item.order(created_at: :desc) # 最新順に商品を表示
+    @items = Item.order(created_at: :desc)
   end
 
   def new
@@ -17,25 +17,36 @@ class ItemsController < ApplicationController
     if @item.save
       redirect_to root_path, notice: '商品が出品されました'
     else
+      # エラーメッセージをログに出力してデバッグしやすくする
+      logger.debug "Item creation failed: #{@item.errors.full_messages.join(', ')}"
       render :new, status: :unprocessable_entity
     end
   end
 
   def show
-    # @itemはbefore_actionで設定済みのはず
+    # @itemはbefore_actionで設定済み
   end
 
   def edit
-    # 商品が購入済みであればトップページにリダイレクトするように設定した
-    redirect_to root_path, alert: 'この商品はすでに購入済みです' if @item.order.present?
+    # 商品が購入済みであればトップページにリダイレクト
+    return unless @item.order.present?
+
+    redirect_to root_path, alert: 'この商品はすでに購入済みです'
   end
 
   def update
     if @item.update(item_params)
       redirect_to item_path(@item), notice: '商品情報が更新されました'
     else
+      # エラーメッセージをログに出力してデバッグしやすくする
+      logger.debug "Item update failed: #{@item.errors.full_messages.join(', ')}"
       render :edit, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @item.destroy
+    redirect_to root_path, notice: '商品が削除されました'
   end
 
   private
@@ -50,6 +61,8 @@ class ItemsController < ApplicationController
   end
 
   def correct_user
-    redirect_to root_path, alert: '不正なアクセスです' unless @item.user_id == current_user.id
+    return if @item.user_id == current_user.id
+
+    redirect_to root_path, alert: '不正なアクセスです'
   end
 end

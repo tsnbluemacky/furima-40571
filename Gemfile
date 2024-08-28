@@ -1,5 +1,3 @@
-# 提供されたGemfile
-
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -16,6 +14,9 @@ gem "stimulus-rails"
 gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
+
+# 画像処理用のGemをここに追加
+gem 'image_processing', '~> 1.2'
 
 # 認証関連のGem
 gem 'devise'

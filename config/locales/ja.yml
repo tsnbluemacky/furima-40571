@@ -1,0 +1,38 @@
+ja:
+  activerecord:
+    attributes:
+      user:
+        nickname: ニックネーム
+        family_name: 名字
+        first_name: 名前
+        family_name_zenkaku: 名字（全角）
+        first_name_zenkaku: 名前（全角）
+        birth: 生年月日
+      item_form:
+        images: 画像
+        name: 商品名
+        content: 商品の説明
+        category_id: カテゴリー
+        condition_id: 商品の状態
+        area_id: 発送元の地域
+        load_id: 配送料の負担
+        delivery_id: 発送までの日数
+        price: 販売価格 
+
+    errors:
+      models:
+        item:
+          attributes:
+            image:
+              blank: "画像を選択してください"
+            name:
+              blank: "商品名を入力してください"
+            text:
+              blank: "商品の説明を入力してください"
+            price:
+              blank: "価格を入力してください"
+              not_a_number: "価格は数値で入力してください"
+              greater_than_or_equal_to: "価格は300円以上に設定してください"
+              less_than_or_equal_to: "価格は9,999,999円以下に設定してください"
+            prefecture_id:
+              other_than: "発送元の地域を選択してください"
