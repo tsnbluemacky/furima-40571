@@ -15,8 +15,9 @@ gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 gem "bootsnap", require: false
 
-# 画像処理用のGemをここに追加
+# 画像処理用のGem
 gem 'image_processing', '~> 1.2'
+gem 'mini_magick' # 追加
 
 # 認証関連のGem
 gem 'devise'
