@@ -4,7 +4,7 @@ class User < ApplicationRecord
 
   # Associations
   has_many :items
-  has_many :purchase_records
+  # has_many :purchase_records # 購入履歴の関連付けをコメントアウト
 
   # Constants for validation
   PASSWORD_REGEX = /\A(?=.*?[a-z])(?=.*?\d)[a-z\d]+\z/i

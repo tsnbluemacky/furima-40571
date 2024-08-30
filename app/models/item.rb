@@ -4,8 +4,11 @@ class Item < ApplicationRecord
   # 関連付け
   belongs_to :user            # ユーザーとの関連付け
   has_one_attached :image     # 画像の添付（Active Storage）
-  has_one :order              # 注文情報との関連付け
 
+  # 注文情報との関連付けはコメントアウト
+  # has_one :order
+
+  # カテゴリー、状態、配送料、発送元、発送までの日数の関連付け
   belongs_to :category        # カテゴリー情報との関連付け
   belongs_to :condition       # 商品の状態情報との関連付け
   belongs_to :shipping        # 配送料情報との関連付け
