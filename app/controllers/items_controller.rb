@@ -1,8 +1,8 @@
 # app/controllers/items_controller.rb
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update]
-  before_action :set_item, only: [:show, :edit, :update, :destroy]
-  before_action :correct_user, only: [:edit, :update, :destroy]
+  # before_action :set_item, only: [:show, :edit, :update, :destroy]
+  # before_action :correct_user, only: [:edit, :update, :destroy]
 
   def index
     # 商品一覧機能実装時に有効にする
@@ -59,13 +59,13 @@ class ItemsController < ApplicationController
                                  :delivery_time_id, :price).merge(user_id: current_user.id)
   end
 
-  def set_item
-    @item = Item.find(params[:id])
-  end
+  # def set_item
+  #   @item = Item.find(params[:id])
+  # end
 
-  def correct_user
-    return if @item.user_id == current_user.id
+  # def correct_user
+  #   return if @item.user_id == current_user.id
 
-    redirect_to root_path, alert: '不正なアクセスです'
-  end
+  #   redirect_to root_path, alert: '不正なアクセスです'
+  # end
 end
