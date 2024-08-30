@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root 'items#index'
   
   # 必要なアクションのみを定義
-  resources :items, only: [:index, :new, :create, :edit, :update, :show] do
+  resources :items, only: [:new, :create] do
     # 商品購入機能実装時に有効にする
     # resources :orders, only: [:index, :create]
   end
