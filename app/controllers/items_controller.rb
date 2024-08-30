@@ -5,7 +5,8 @@ class ItemsController < ApplicationController
   before_action :correct_user, only: [:edit, :update, :destroy]
 
   def index
-    @items = Item.order(created_at: :desc)
+    # 商品一覧機能実装時に有効にする
+    # @items = Item.order(created_at: :desc)
   end
 
   def new
@@ -29,9 +30,10 @@ class ItemsController < ApplicationController
 
   def edit
     # 商品が購入済みであればトップページにリダイレクト
-    return unless @item.order.present?
+    # 商品購入機能実装時に有効にする
+    # return unless @item.order.present?
 
-    redirect_to root_path, alert: 'この商品はすでに購入済みです'
+    # redirect_to root_path, alert: 'この商品はすでに購入済みです'
   end
 
   def update
@@ -45,8 +47,9 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    @item.destroy
-    redirect_to root_path, notice: '商品が削除されました'
+    # 商品削除機能実装時に有効にする
+    # @item.destroy
+    # redirect_to root_path, notice: '商品が削除されました'
   end
 
   private
