@@ -1,12 +1,11 @@
-# app/controllers/items_controller.rb
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
-  # before_action :set_item, only: [:show, :edit, :update, :destroy]
-  # before_action :correct_user, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :correct_user, only: [:edit, :update, :destroy]
 
   def index
-    # 商品一覧機能実装時に有効にする
-    # @items = Item.order(created_at: :desc)
+    # 商品一覧機能を有効にする
+    @items = Item.order(created_at: :desc)
   end
 
   def new
@@ -18,7 +17,6 @@ class ItemsController < ApplicationController
     if @item.save
       redirect_to root_path, notice: '商品が出品されました'
     else
-      # エラーメッセージをログに出力してデバッグしやすくする
       logger.debug "Item creation failed: #{@item.errors.full_messages.join(', ')}"
       render :new, status: :unprocessable_entity
     end
@@ -30,26 +28,23 @@ class ItemsController < ApplicationController
 
   def edit
     # 商品が購入済みであればトップページにリダイレクト
-    # 商品購入機能実装時に有効にする
-    # return unless @item.order.present?
+    return unless @item.order.present?
 
-    # redirect_to root_path, alert: 'この商品はすでに購入済みです'
+    redirect_to root_path, alert: 'この商品はすでに購入済みです'
   end
 
   def update
     if @item.update(item_params)
       redirect_to item_path(@item), notice: '商品情報が更新されました'
     else
-      # エラーメッセージをログに出力してデバッグしやすくする
       logger.debug "Item update failed: #{@item.errors.full_messages.join(', ')}"
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    # 商品削除機能実装時に有効にする
-    # @item.destroy
-    # redirect_to root_path, notice: '商品が削除されました'
+    @item.destroy
+    redirect_to root_path, notice: '商品が削除されました'
   end
 
   private
@@ -59,13 +54,13 @@ class ItemsController < ApplicationController
                                  :delivery_time_id, :price).merge(user_id: current_user.id)
   end
 
-  # def set_item
-  #   @item = Item.find(params[:id])
-  # end
+  def set_item
+    @item = Item.find(params[:id])
+  end
 
-  # def correct_user
-  #   return if @item.user_id == current_user.id
+  def correct_user
+    return if @item.user_id == current_user.id
 
-  #   redirect_to root_path, alert: '不正なアクセスです'
-  # end
+    redirect_to root_path, alert: '不正なアクセスです'
+  end
 end
