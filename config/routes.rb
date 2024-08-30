@@ -3,11 +3,13 @@ Rails.application.routes.draw do
   
   root 'items#index'
   
+  # 必要なアクションのみを定義
   resources :items, only: [:index, :new, :create, :edit, :update, :show] do
-    # 商品購入機能実装時に有効
+    # 商品購入機能実装時に有効にする
     # resources :orders, only: [:index, :create]
   end
-  
-  resources :categories, only: [:index, :show]
-  resources :brands, only: [:index, :show]
+
+  # カテゴリとブランドのルートを一旦削除（現時点で使わないからねからね）
+  # resources :categories, only: [:index, :show]
+  # resources :brands, only: [:index, :show]
 end
