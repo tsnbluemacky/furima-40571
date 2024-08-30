@@ -28,7 +28,9 @@ class Item < ApplicationRecord
     }
   end
 
-  # ActiveHashのIDが0である場合のバリデーション
-  validates :category_id, :condition_id, :shipping_id, :prefecture_id, :delivery_time_id,
+  # ActiveHashのIDが1である場合のバリデーション（住所は除く）
+  validates :category_id, :condition_id, :shipping_id, :delivery_time_id,
+            numericality: { other_than: 1, message: 'を選択してください' } # IDが1以外であることをチェック
+  validates :prefecture_id,
             numericality: { other_than: 0, message: 'を選択してください' } # IDが0以外であることをチェック
 end

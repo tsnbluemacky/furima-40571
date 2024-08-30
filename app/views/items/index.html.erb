@@ -1,6 +1,5 @@
 <%= render "shared/header" %>
 <div class='main'>
-
   <%# 画面上部の「人生を変えるフリマアプリ」帯部分 %>
   <div class='title-contents'>
     <h2 class='service-title'>
@@ -18,8 +17,7 @@
     </div>
   </div>
 
-  <%# 商品一覧（コメントアウト） %>
-  <%# 
+  <%# 商品一覧 %>
   <div class='item-contents'>
     <h2 class='title'>ピックアップカテゴリー</h2>
     <div class="subtitle">
@@ -28,7 +26,7 @@
     <ul class='item-lists'>
       <% @items.each do |item| %>
       <li class='list'>
-        <%= link_to item_path(item.id) do %>
+        <%= link_to "#" do %>
         <div class='item-img-content'>
           <%= image_tag item.image, class: "item-img" %>
           <%# 商品が売れていればsold outを表示しましょう %>
@@ -76,7 +74,6 @@
       <% end %>
     </ul>
   </div>
-  %>
 
   <%# 出品するボタンのリンク %>
   <%= link_to new_item_path, class: 'purchase-btn' do %>
