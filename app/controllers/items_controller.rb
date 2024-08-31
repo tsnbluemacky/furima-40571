@@ -1,3 +1,4 @@
+# 最初のコード (修正後)
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create]
   # before_action :set_item, only: [:show, :edit, :update, :destroy]
@@ -34,8 +35,8 @@ class ItemsController < ApplicationController
   end
 
   def update
-    # # if @item.update(item_params)
-    # #   redirect_to item_path(@item), notice: '商品情報が更新されました'
+    # if @item.update(item_params)
+    #   redirect_to item_path(@item), notice: '商品情報が更新されました'
     # else
     #   logger.debug "Item update failed: #{@item.errors.full_messages.join(', ')}"
     #   render :edit, status: :unprocessable_entity
@@ -54,13 +55,13 @@ class ItemsController < ApplicationController
                                  :delivery_time_id, :price).merge(user_id: current_user.id)
   end
 
-#   def set_item
-#     @item = Item.find(params[:id])
-#   end
+  # def set_item
+  #   @item = Item.find(params[:id])
+  # end
 
-#   def correct_user
-#     return if @item.user_id == current_user.id
+  # def correct_user
+  #   return if @item.user_id == current_user.id
 
-#     redirect_to root_path, alert: '不正なアクセスです'
-#   end
-# end
+  #   redirect_to root_path, alert: '不正なアクセスです'
+  # end
+end
