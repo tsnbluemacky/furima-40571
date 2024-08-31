@@ -15,8 +15,9 @@
     </ul>
     <ul class='lists-right'>
       <% if user_signed_in? %>
+        <!-- ログインしているユーザー名を表示 -->
         <li><%= link_to current_user.nickname, "#", class: "user-nickname" %></li>
-        <!-- ログアウトリンクの修正 -->
+        <!-- Turboを使用したログアウトリンク -->
         <li><%= link_to 'ログアウト', destroy_user_session_path, data: { turbo_method: :delete }, class: "logout" %></li>
       <% else %>
         <li><%= link_to 'ログイン', new_user_session_path, class: "login" %></li>
