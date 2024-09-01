@@ -27,4 +27,13 @@ class User < ApplicationRecord
   def error_messages
     errors.messages.transform_values(&:uniq)
   end
+
+  validates :birth_date, presence: true
+
+  validates :password,
+            format: { with: /\A(?=.*?[a-zA-Z])(?=.*?\d)[a-zA-Z\d]+\z/, message: '半角英数字を入力してください' }
+
+  # Associations(commented out until Product and Order models are created)
+  has_many :products, dependent: :destroy
+  has_many :orders
 end
