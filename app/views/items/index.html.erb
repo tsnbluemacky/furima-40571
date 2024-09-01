@@ -130,7 +130,6 @@
       <% if @items.any? %>
         <% @items.each do |item| %>
           <li class='list'>
-            <%= link_to item_path(item) do %>
               <div class='item-img-content'>
                 <!-- 画像の表示: ActiveStorageの画像を正しく表示し、画像がない場合の処理を追加 -->
                 <% if item.image.attached? %>
