@@ -32,5 +32,5 @@ class Item < ApplicationRecord
   # 商品が売れているかを判断するメソッド
   # def sold_out?
   #   order.present?
-  #   end
+  # end
 end
