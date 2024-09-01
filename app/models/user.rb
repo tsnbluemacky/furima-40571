@@ -1,21 +1,31 @@
 class User < ApplicationRecord
-  # Devise modules for user authentication
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  # Validations for user attributes
+  # アソシエーション
+  has_many :items
+  # has_many :purchase_records # 購入履歴の関連付けをコメントアウト
+
+  # バリデーション用の定数
+  PASSWORD_REGEX = /\A(?=.*?[a-z])(?=.*?\d)[a-z\d]+\z/i
+  NAME_REGEX = /\A[ぁ-んァ-ヶ一-龥々ー]+\z/
+  KANA_REGEX = /\A[ァ-ヶー]+\z/
+
+  # バリデーション
   validates :nickname, presence: true
+  validates :password, presence: true, format: { with: PASSWORD_REGEX, message: 'は半角英数字で入力してください' }
 
   with_options presence: true do
-    validates :first_name, format: { with: /\A[ぁ-んァ-ヶ一-龥々ー]+\z/, message: '全角で入力してください' }
-    validates :last_name, format: { with: /\A[ぁ-んァ-ヶ一-龥々ー]+\z/, message: '全角で入力してください' }
+    validates :first_name, format: { with: NAME_REGEX, message: 'は全角で入力してください' }
+    validates :last_name, format: { with: NAME_REGEX, message: 'は全角で入力してください' }
+    validates :first_name_kana, format: { with: KANA_REGEX, message: 'は全角カタカナで入力してください' }
+    validates :last_name_kana, format: { with: KANA_REGEX, message: 'は全角カタカナで入力してください' }
+    validates :birth_date
   end
 
-  with_options presence: true do
-    validates :first_name_kana,
-              format: { with: /\A[ァ-ヶー－]+\z/, message: '全角カタカナで入力してください' }
-    validates :last_name_kana,
-              format: { with: /\A[ァ-ヶー－]+\z/, message: '全角カタカナで入力してください' }
+  # エラーメッセージの重複を防ぐ
+  def error_messages
+    errors.messages.transform_values(&:uniq)
   end
 
   validates :birth_date, presence: true
