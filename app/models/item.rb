@@ -3,6 +3,9 @@ class Item < ApplicationRecord
   has_one :order
 
   extend ActiveHash::Associations::ActiveRecordExtensions
+  belongs_to :shipping_fee
+
+  extend ActiveHash::Associations::ActiveRecordExtensions
 
   # 関連付け
   belongs_to :user
@@ -38,4 +41,5 @@ class Item < ApplicationRecord
   def sold_out?
     order.present?
   end
+  validates :shipping_fee_id, presence: true
 end
