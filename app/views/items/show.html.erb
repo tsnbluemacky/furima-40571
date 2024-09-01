@@ -9,20 +9,20 @@
     <div class="item-img-content">
       <%= image_tag(@item.image.attached? ? url_for(@item.image) : "item-sample.png", class: "item-box-img") %> <!-- 商品画像を表示 -->
       
-      <% if @item.sold_out? %>
-        <div class="sold-out">
+      <%# <% if @item.sold_out? %>
+        <%# <div class="sold-out">
           <span><%= t('items.show.sold_out') %></span> <!-- i18n対応のためtメソッドを使用 -->
-        </div>
+        <%# </div>
       <% end %> <!-- 商品が売れている場合は、sold outを表示 -->
-    </div>
+    <%# </div>
     <div class="item-price-box">
       <span class="item-price">
         ¥ <%= number_to_currency(@item.price, unit: "¥", format: "%n", delimiter: ",") %> <!-- 商品価格を表示 -->
-      </span>
+      <%# </span>
       <span class="item-postage">
         <%= @item.shipping_fee.name %> <!-- 配送料負担を表示 -->
-      </span>
-    </div>
+      <%# </span>
+    </div> %> 
 
     <% if user_signed_in? && current_user == @item.user %> <!-- 出品者の場合 -->
       <%= link_to t('items.show.edit'), edit_item_path(@item), class: "item-red-btn" %>
@@ -30,7 +30,7 @@
       <%= link_to t('items.show.delete'), item_path(@item), method: :delete, data: { confirm: t('items.show.confirm_delete') }, class: "item-destroy" %>
     <% elsif user_signed_in? && !@item.sold_out? %> <!-- 購入画面に進むボタンを表示 -->
       <%= link_to t('items.show.purchase'), new_item_order_path(@item), class: "item-red-btn" %>
-    <% end %>
+    <% end %> 
 
     <div class="item-explain-box">
       <span><%= @item.text %></span> <!-- 商品説明を表示 -->
