@@ -25,7 +25,7 @@
 | description         | text       | null: false                    |
 | category_id         | integer    | null: false                    |
 | condition_id        | integer    | null: false                    |
-| shipping_charge_id  | integer    | null: false                    |
+| shipping_fee_id  | integer    | null: false                    |
 | ship_from_area_id   | integer    | null: false                    |
 | shipping_day_id     | integer    | null: false                    |
 | price               | integer    | null: false                    |
