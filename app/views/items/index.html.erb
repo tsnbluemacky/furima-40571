@@ -9,43 +9,45 @@
     <ul class='item-lists'>
       <% if @items.any? %>
         <% @items.each do |item| %>
-        <li class='list'>
-          <%= link_to item_path(item) do %>
-          <div class='item-img-content'>
-            <%= image_tag item.image.attached? ? item.image.variant(resize: '300x300') : 'default_image.png', class: "item-img" %>
-            <% if item.sold_out? %>
-              <div class='sold-out'>
-                <span>Sold Out!!</span>
+          <li class='list'>
+            <%= link_to item_path(item) do %>
+              <div class='item-img-content'>
+                <%# 画像の表示: ActiveStorageの画像を正しく表示する %>
+                <%= image_tag(url_for(item.image), class: "item-img") if item.image.attached? %>
+                <% if item.sold_out? %>
+                  <div class='sold-out'>
+                    <span>Sold Out!!</span>
+                  </div>
+                <% end %>
+              </div>
+              <div class='item-info'>
+                <h3 class='item-name'><%= item.name %></h3>
+                <div class='item-price'>
+                  <span><%= item.price %>円<br><%= item.shipping.name %></span>
+                  <div class='star-btn'>
+                    <%= image_tag "star.png", class:"star-icon" %>
+                    <span class='star-count'>0</span>
+                  </div>
+                </div>
               </div>
             <% end %>
-          </div>
-          <div class='item-info'>
-            <h3 class='item-name'><%= item.name %></h3>
-            <div class='item-price'>
-              <span><%= item.price %>円<br><%= item.shipping_fee %></span>
-              <div class='star-btn'>
-                <%= image_tag "star.png", class:"star-icon" %>
-                <span class='star-count'>0</span>
-              </div>
-            </div>
-          </div>
-          <% end %>
-        </li>
+          </li>
         <% end %>
       <% else %>
+        <%# 商品がない場合はダミー商品を表示 %>
         <li class='list'>
           <%= link_to '#' do %>
-          <%= image_tag "https://tech-master.s3.amazonaws.com/uploads/curriculums/images/Rails1-4/sample.jpg", class: "item-img" %>
-          <div class='item-info'>
-            <h3 class='item-name'>商品を出品してね！</h3>
-            <div class='item-price'>
-              <span>99999999円<br>(税込み)</span>
-              <div class='star-btn'>
-                <%= image_tag "star.png", class:"star-icon" %>
-                <span class='star-count'>0</span>
+            <%= image_tag "https://tech-master.s3.amazonaws.com/uploads/curriculums/images/Rails1-4/sample.jpg", class: "item-img" %>
+            <div class='item-info'>
+              <h3 class='item-name'>商品を出品してね！</h3>
+              <div class='item-price'>
+                <span>99999999円<br>(税込み)</span>
+                <div class='star-btn'>
+                  <%= image_tag "star.png", class:"star-icon" %>
+                  <span class='star-count'>0</span>
+                </div>
               </div>
             </div>
-          </div>
           <% end %>
         </li>
       <% end %>
@@ -54,37 +56,9 @@
   <%# /商品一覧 %>
 </div>
 
-<%= link_to('#', class: 'purchase-btn') do %>
+<%= link_to(new_item_path, class: 'purchase-btn') do %>
   <span class='purchase-btn-text'>出品する</span>
   <%= image_tag 'icon_camera.png', size: '185x50', class: "purchase-btn-icon" %>
 <% end %>
-      <%# 商品のインスタンス変数になにか入っている場合、中身のすべてを展開するコード（コメントアウト） %>
-      <%# <% @items.each do |item| %>
-      <li class='list'>
-        <%= link_to "#" do %>
-        <div class='item-img-content'>
-          <!-- サンプル画像を表示 -->
-          <%= image_tag "item-sample.png", class: "item-img" %>
-        </div>
-        <div class='item-info'>
-          <h3 class='item-name'>
-            <!-- サンプル名を表示 -->
-            <%= "商品名" %>
-          </h3>
-          <div class='item-price'>
-            <!-- サンプルの販売価格と配送料負担を表示 -->
-            <span><%= "販売価格" %>円<br><%= '配送料負担' %></span>
-          </div>
-        </div>
-        <% end %> <!-- ここでリンクブロックを閉じる -->
-      </li>
-      <%# end %> <!-- ここで繰り返しブロックを閉じる（コメントアウト済み） -->
-    </ul>
-  </div>
-  
-  <%= link_to(new_item_path, class: 'purchase-btn') do %>
-    <span class='purchase-btn-text'>出品する</span>
-    <%= image_tag 'icon_camera.png', size: '185x50', class: "purchase-btn-icon" %>
-  <% end %> <!-- ここでリンクブロックを閉じる -->
-</div> <!-- ここでmainクラスのdivを閉じる -->
+
 <%= render "shared/footer" %>
