@@ -83,7 +83,7 @@ class ItemsController < ApplicationController
     redirect_to root_path
   end
 
-  def item_already_ordered?
-    @item.order.present?
-  end
+  # def item_already_ordered?
+  #   @item.order.present?
+  # end
 end
