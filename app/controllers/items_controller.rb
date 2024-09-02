@@ -12,6 +12,21 @@ class ItemsController < ApplicationController
     Rails.logger.info("Item #{@item.id} viewed by #{current_user&.email || 'Guest'}")
   end
 
+  def new
+    @item = Item.new
+  end
+
+  def create
+    @item = Item.new(item_params)
+    if @item.save
+      Rails.logger.info("Item #{@item.id} created by #{current_user.email}")
+      redirect_to @item, notice: '商品が作成されました。'
+    else
+      Rails.logger.error("Item creation failed: #{@item.errors.full_messages.join(', ')}")
+      render :new, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     if @item.destroy
       Rails.logger.info("Item #{@item.id} destroyed by #{current_user.email}")
@@ -43,9 +58,5 @@ class ItemsController < ApplicationController
     flash[:alert] = 'この操作は許可されていません。'
     Rails.logger.warn("Unauthorized access attempt by #{current_user.email} on item #{@item.id}")
     redirect_to root_path
-  end
-
-  def item_already_ordered?
-    @item.order.present?
   end
 end
