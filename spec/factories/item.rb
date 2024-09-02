@@ -2,10 +2,10 @@
 FactoryBot.define do
   factory :item do
     name { 'Test Item' }
-    text { 'This is a test item.' } # description -> text
+    text { 'This is a test item.' }
     category_id { 2 }
     condition_id { 2 }
-    shipping_id { 2 } # postage_payer_id -> shipping_id
+    shipping_fee_id { 2 }
     prefecture_id { 2 }
     delivery_time_id { 2 }
     price { 1000 }
