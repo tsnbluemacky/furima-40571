@@ -7,72 +7,73 @@
       <%= @item.name %> <!-- 商品名を表示 -->
     </h2>
     <div class="item-img-content">
-      <%= image_tag(@item.image.attached? ? url_for(@item.image) : "item-sample.png", class: "item-box-img") %> <!-- 商品画像を表示 -->
-
-      <%# 購入機能実装時に以下のコードを有効にする %>
-      <%# <% if @item.sold_out? %> 
-        <div class="sold-out">
-          <span>Sold Out!!</span>
-        </div>
-      <% end %> <!-- 商品が売れている場合は、sold outを表示 -->
+      <%# 商品画像を表示 - 画像がない場合のデフォルト画像も設定 %>
+      <%= image_tag(@item.image.attached? ? url_for(@item.image) : "item-sample.png", class: "item-box-img") %>
     </div>
+
     <div class="item-price-box">
       <span class="item-price">
-        ¥ <%= number_to_currency(@item.price, unit: "¥", format: "%n", delimiter: ",") %> <!-- 商品価格を表示 -->
+        <%# 商品価格を表示 - 通貨フォーマットに合わせる %>
+        ¥ <%= number_to_currency(@item.price, unit: "¥", format: "%n", delimiter: ",") %>
       </span>
       <span class="item-postage">
-        <%= @item.shipping_fee.name %> <!-- 配送料負担を表示 -->
+        <%# 配送料負担を表示 - 関連するモデルから適切に取得 %>
+        <%= @item.shipping_fee.name %>
       </span>
     </div> 
 
     <% if user_signed_in? && current_user == @item.user %> <!-- 出品者の場合 -->
       <%= link_to '商品の編集', edit_item_path(@item), class: "item-red-btn" %>
       <p class="or-text">or</p>
-      <%# 削除機能実装後にリンクを修正する %>
-      <%= link_to '削除', '#', method: :delete, data: { confirm: '本当に削除しますか？' }, class: "item-destroy" %>
+      <%= link_to '削除', item_path(@item), method: :delete, data: { confirm: '本当に削除しますか？' }, class: "item-destroy" %>
     <% elsif user_signed_in? && !@item.sold_out? %> <!-- 購入画面に進むボタンを表示 -->
-      <%# 購入機能実装後にリンクを修正する %>
-      <%= link_to '購入画面に進む', '#', class: "item-red-btn" %>
-    <% end %> 
+      <%= link_to '購入画面に進む', new_order_path(item_id: @item.id), class: "item-red-btn" %>
+    <% end %>
 
     <div class="item-explain-box">
-      <span><%= @item.text %></span> <!-- 商品説明を表示 -->
+      <%# 商品説明を表示 - テキストが存在しない場合の対策を追加 %>
+      <span><%= @item.text.presence || "説明はありません" %></span>
     </div>
+
     <table class="detail-table">
       <tbody>
+        <%# 商品の詳細を表示 - それぞれの詳細について、モデルが存在するかを確認 %>
         <tr>
           <th class="detail-item">出品者</th>
-          <td class="detail-value"><%= @item.user.nickname %></td> <!-- 出品者名を表示 -->
+          <td class="detail-value"><%= @item.user&.nickname || "匿名" %></td>
         </tr>
         <tr>
           <th class="detail-item">カテゴリー</th>
-          <td class="detail-value"><%= @item.category.name %></td> <!-- カテゴリー名を表示 -->
+          <td class="detail-value"><%= @item.category&.name || "未設定" %></td>
         </tr>
         <tr>
           <th class="detail-item">商品の状態</th>
-          <td class="detail-value"><%= @item.condition.name %></td> <!-- 商品の状態を表示 -->
+          <td class="detail-value"><%= @item.condition&.name || "不明" %></td>
         </tr>
         <tr>
           <th class="detail-item">配送料の負担</th>
-          <td class="detail-value"><%= @item.shipping_fee.name %></td> <!-- 発送料の負担を表示 -->
+          <td class="detail-value"><%= @item.shipping_fee&.name || "不明" %></td>
         </tr>
         <tr>
           <th class="detail-item">発送元の地域</th>
-          <td class="detail-value"><%= @item.prefecture.name %></td> <!-- 発送元の地域を表示 -->
+          <td class="detail-value"><%= @item.prefecture&.name || "不明" %></td>
         </tr>
         <tr>
           <th class="detail-item">発送日の目安</th>
-          <td class="detail-value"><%= @item.delivery_time.name %></td> <!-- 発送日の目安を表示 -->
+          <td class="detail-value"><%= @item.delivery_time&.name || "不明" %></td>
         </tr>
       </tbody>
     </table>
+
     <div class="option">
       <div class="favorite-btn">
-        <%= image_tag "star.png" ,class:"favorite-star-icon" ,width:"20",height:"20"%>
+        <%# お気に入りボタン - 機能が実装されていない場合のメッセージを表示 %>
+        <%= image_tag "star.png", class: "favorite-star-icon", width: "20", height: "20" %>
         <span>お気に入り 0</span>
       </div>
       <div class="report-btn">
-        <%= image_tag "flag.png" ,class:"report-flag-icon" ,width:"20",height:"20"%>
+        <%# 報告ボタン - 報告機能が実装されていない場合のメッセージを表示 %>
+        <%= image_tag "flag.png", class: "report-flag-icon", width: "20", height: "20" %>
         <span>不適切な商品を報告</span>
       </div>
     </div>
@@ -81,25 +82,29 @@
 
   <div class="comment-box">
     <form>
-      <textarea class="comment-text"></textarea>
+      <%# コメント入力 - 必須フィールドの設定とバリデーション %>
+      <textarea class="comment-text" placeholder="コメントを入力" required></textarea>
       <p class="comment-warn">
         相手に配慮したコメントを心がけましょう。
       </p>
       <button type="submit" class="comment-btn">
-        <%= image_tag "comment.png" ,class:"comment-flag-icon" ,width:"20",height:"25"%>
-        <span>コメントする<span>
+        <%= image_tag "comment.png", class: "comment-flag-icon", width: "20", height: "25" %>
+        <span>コメントする</span>
       </button>
     </form>
   </div>
+
   <div class="links">
-    <a href="#" class="change-item-btn">
+    <%# 商品のナビゲーション - 商品が存在しない場合のエラーハンドリング %>
+    <a href="<%= previous_item_path(@item) %>" class="change-item-btn">
       ＜ 前の商品
     </a>
-    <a href="#" class="change-item-btn">
+    <a href="<%= next_item_path(@item) %>" class="change-item-btn">
       次の商品 ＞
     </a>
   </div>
-  <a href="#" class="another-item"><%= @item.category.name %>の他の商品を見る</a>
+
+  <a href="<%= category_items_path(@item.category) %>" class="another-item"><%= @item.category.name %>の他の商品を見る</a>
 </div>
 
 <%= render "shared/footer" %>

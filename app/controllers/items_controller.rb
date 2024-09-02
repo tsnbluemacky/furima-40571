@@ -38,18 +38,19 @@ class ItemsController < ApplicationController
   end
 
   def update
-    if item_already_ordered?
-      redirect_to root_path, alert: t('items.update.already_ordered')
+    # 将来的に必要になる可能性があるため、コメントアウトしたコードを残しておく
+    # if item_already_ordered?
+    #   redirect_to root_path, alert: t('items.update.already_ordered')
+    # else
+    #   @item.image.attach(@item.image.blob) if params[:item][:image].blank? && @item.image.attached?
+    if @item.update(item_params)
+      Rails.logger.info("Item #{@item.id} updated successfully by #{current_user.email}")
+      redirect_to item_path(@item), notice: t('items.update.success')
     else
-      @item.image.attach(@item.image.blob) if params[:item][:image].blank? && @item.image.attached?
-      if @item.update(item_params)
-        Rails.logger.info("Item #{@item.id} updated successfully by #{current_user.email}")
-        redirect_to item_path(@item), notice: t('items.update.success')
-      else
-        Rails.logger.error("Item update failed: #{@item.errors.full_messages.join(', ')}")
-        render :edit, status: :unprocessable_entity
-      end
+      Rails.logger.error("Item update failed: #{@item.errors.full_messages.join(', ')}")
+      render :edit, status: :unprocessable_entity
     end
+    # end
   end
 
   def destroy
