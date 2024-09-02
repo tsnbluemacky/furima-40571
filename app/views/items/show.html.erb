@@ -11,23 +11,14 @@
       <%= image_tag(@item.image.attached? ? url_for(@item.image) : "item-sample.png", class: "item-box-img") %>
     </div>
 
-    <div class="item-price-box">
-      <span class="item-price">
-        <%# 商品価格を表示 - 通貨フォーマットに合わせる %>
-        ¥ <%= number_to_currency(@item.price, unit: "¥", format: "%n", delimiter: ",") %>
-      </span>
-      <span class="item-postage">
-        <%# 配送料負担を表示 - 関連するモデルから適切に取得 %>
-        <%= @item.shipping_fee.name %>
-      </span>
-    </div> 
-
-    <% if user_signed_in? && current_user == @item.user %> <!-- 出品者の場合 -->
-      <%= link_to '商品の編集', edit_item_path(@item), class: "item-red-btn" %>
-      <p class="or-text">or</p>
-      <%= link_to '削除', item_path(@item), method: :delete, data: { confirm: '本当に削除しますか？' }, class: "item-destroy" %>
-    <% elsif user_signed_in? && !@item.sold_out? %> <!-- 購入画面に進むボタンを表示 -->
-      <%= link_to '購入画面に進む', new_order_path(item_id: @item.id), class: "item-red-btn" %>
+    <% if user_signed_in? %>
+      <% if current_user == @item.user %> <!-- 出品者の場合 -->
+        <%= link_to '商品の編集', edit_item_path(@item), class: "item-red-btn" %>
+        <p class="or-text">or</p>
+        <%= link_to '削除', "#", method: :delete, data: { confirm: '本当に削除しますか？' }, class: "item-destroy" %>
+      <% elsif !@item.sold_out? %> <!-- 購入画面に進むボタンを表示 -->
+        <%= link_to '購入画面に進む', "#", class: "item-red-btn" %>
+      <% end %>
     <% end %>
 
     <div class="item-explain-box">

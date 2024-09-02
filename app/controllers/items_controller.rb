@@ -29,12 +29,12 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    if item_already_ordered?
-      Rails.logger.warn("Attempt to edit already ordered item #{@item.id} by #{current_user.email}")
-      redirect_to root_path, alert: t('items.edit.already_ordered')
-    else
-      Rails.logger.info("Item edit page accessed by #{current_user.email} for item #{@item.id}")
-    end
+    # if item_already_ordered?
+    #   Rails.logger.warn("Attempt to edit already ordered item #{@item.id} by #{current_user.email}")
+    #   redirect_to root_path, alert: t('items.edit.already_ordered')
+    # else
+    #   Rails.logger.info("Item edit page accessed by #{current_user.email} for item #{@item.id}")
+    # end
   end
 
   def update
@@ -54,13 +54,13 @@ class ItemsController < ApplicationController
   end
 
   def destroy
-    if @item.destroy
-      Rails.logger.info("Item #{@item.id} destroyed by #{current_user.email}")
-      redirect_to root_path, notice: t('items.destroy.success')
-    else
-      Rails.logger.error("Item deletion failed: #{@item.errors.full_messages.join(', ')}")
-      redirect_to edit_item_path(@item), alert: t('items.destroy.failure')
-    end
+    # if @item.destroy
+    #   Rails.logger.info("Item #{@item.id} destroyed by #{current_user.email}")
+    #   redirect_to root_path, notice: t('items.destroy.success')
+    # else
+    #   Rails.logger.error("Item deletion failed: #{@item.errors.full_messages.join(', ')}")
+    #   redirect_to edit_item_path(@item), alert: t('items.destroy.failure')
+    # end
   end
 
   private
