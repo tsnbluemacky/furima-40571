@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   
   # 必要なアクションを定義
   resources :items do
-    resources :orders, only: [:new, :create] # ここで orders のルートを追加
+    # resources :orders, only: [:new, :create] # ここで orders のルートを追加
   end
 
   # カテゴリとブランドのルートを一旦削除（現時点で使わないため）
