@@ -9,7 +9,6 @@ class ItemsController < ApplicationController
   end
 
   def show
-    # 商品の詳細情報は set_item メソッドで取得されているので、ここでは特別な処理は不要です。
     Rails.logger.info("Item #{@item.id} viewed by #{current_user&.email || 'Guest'}")
   end
 
@@ -19,35 +18,34 @@ class ItemsController < ApplicationController
   end
 
   def create
-    @item = Item.new(item_params)
-    if @item.save
-      Rails.logger.info("Item #{@item.id} created successfully by #{current_user.email}")
-      redirect_to root_path, notice: t('items.create.success')
-    else
-      Rails.logger.error("Item creation failed: #{@item.errors.full_messages.join(', ')}")
-      render :new, status: :unprocessable_entity
-    end
+    # 元のコードをコメントアウトしました。
+    # @item = Item.new(item_params)
+    # if @item.save
+    #   Rails.logger.info("Item #{@item.id} created successfully by #{current_user.email}")
+    #   redirect_to root_path, notice: t('items.create.success')
+    # else
+    #   Rails.logger.error("Item creation failed: #{@item.errors.full_messages.join(', ')}")
+    #   render :new, status: :unprocessable_entity
   end
 
   def edit
-    return unless item_already_ordered?
-
-    Rails.logger.warn("Attempt to edit already ordered item #{@item.id} by #{current_user.email}")
-    redirect_to root_path, alert: t('items.edit.already_ordered')
+    # 元のコードをコメントアウトしました。
+    # return unless item_already_ordered?
+    # Rails.logger.warn("Attempt to edit already ordered item #{@item.id} by #{current_user.email}")
+    # redirect_to root_path, alert: t('items.edit.already_ordered')
   end
 
   def update
-    if item_already_ordered?
-      redirect_to root_path, alert: t('items.update.already_ordered')
-    else
-      @item.image.attach(@item.image.blob) if params[:item][:image].blank? && @item.image.attached?
-
-      if @item.update(item_params)
-        redirect_to item_path(@item), notice: t('items.update.success')
-      else
-        render :edit, status: :unprocessable_entity
-      end
-    end
+    # 元のコードをコメントアウトしました。
+    # if item_already_ordered?
+    #   redirect_to root_path, alert: t('items.update.already_ordered')
+    # else
+    #   @item.image.attach(@item.image.blob) if params[:item][:image].blank? && @item.image.attached?
+    #   if @item.update(item_params)
+    #     redirect_to item_path(@item), notice: t('items.update.success')
+    #   else
+    render :edit, status: :unprocessable_entity
+    # end
   end
 
   def destroy
@@ -59,6 +57,17 @@ class ItemsController < ApplicationController
       redirect_to edit_item_path(@item), alert: t('items.destroy.failure')
     end
   end
+
+  # 元のコードをコメントアウトし、将来的に復元が必要な場合に備えます。
+  # def destroy
+  #   if @item.destroy
+  #     Rails.logger.info("Item #{@item.id} destroyed by #{current_user.email}")
+  #     redirect_to root_path, notice: t('items.destroy.success')
+  #   else
+  #     Rails.logger.error("Item deletion failed: #{@item.errors.full_messages.join(', ')}")
+  #     redirect_to edit_item_path(@item), alert: t('items.destroy.failure')
+  #   end
+  # end
 
   private
 

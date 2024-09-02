@@ -29,8 +29,9 @@ class Item < ApplicationRecord
               numericality: { other_than: 0, message: 'を選択してください' }
   end
 
+  # まだ要らんらしいよ
   # 商品が売れているかを判断するメソッド
-  def sold_out?
-    order.present?
-  end
+  # def sold_out?
+  #   order.present?
+  # end
 end

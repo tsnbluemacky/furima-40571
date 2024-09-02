@@ -23,11 +23,7 @@ app/assets/stylesheets/items/new.css %>
           クリックしてファイルをアップロード
         </p>
         <%= f.file_field :image, id:"item-image" %>
-        <% if @item.image.attached? %>
-          <div class="existing-image">
-            <%= image_tag @item.image %>
-          </div>
-        <% end %>
+            <%= image_tag @item.image %>    
       </div>
     </div>
     <%# /商品画像 %>
