@@ -22,36 +22,34 @@
     <% end %>
     
     <div class="item-explain-box">
-      <%# 商品説明を表示 - テキストが存在しない場合の対策を追加 %>
-      <span><%= @item.text.presence || "説明はありません" %></span>
+      <span><%= @item.text %></span> <!-- 商品説明を表示 -->
     </div>
 
     <table class="detail-table">
       <tbody>
-        <%# 商品の詳細を表示 - それぞれの詳細について、モデルが存在するかを確認 %>
         <tr>
           <th class="detail-item">出品者</th>
-          <td class="detail-value"><%= @item.user&.nickname || "匿名" %></td>
+          <td class="detail-value"><%= @item.user.nickname %></td> <!-- 出品者名を表示 -->
         </tr>
         <tr>
           <th class="detail-item">カテゴリー</th>
-          <td class="detail-value"><%= @item.category&.name || "未設定" %></td>
+          <td class="detail-value"><%= @item.category.name %></td> <!-- カテゴリー名を表示 -->
         </tr>
         <tr>
           <th class="detail-item">商品の状態</th>
-          <td class="detail-value"><%= @item.condition&.name || "不明" %></td>
+          <td class="detail-value"><%= @item.condition.name %></td> <!-- 商品の状態を表示 -->
         </tr>
         <tr>
           <th class="detail-item">配送料の負担</th>
-          <td class="detail-value"><%= @item.shipping_fee&.name || "不明" %></td>
+          <td class="detail-value"><%= @item.shipping_fee.name %></td> <!-- 発送料の負担を表示 -->
         </tr>
         <tr>
           <th class="detail-item">発送元の地域</th>
-          <td class="detail-value"><%= @item.prefecture&.name || "不明" %></td>
+          <td class="detail-value"><%= @item.prefecture.name %></td> <!-- 発送元の地域を表示 -->
         </tr>
         <tr>
           <th class="detail-item">発送日の目安</th>
-          <td class="detail-value"><%= @item.delivery_time&.name || "不明" %></td>
+          <td class="detail-value"><%= @item.delivery_time.name %></td> <!-- 発送日の目安を表示 -->
         </tr>
       </tbody>
     </table>
@@ -86,7 +84,6 @@
   </div>
 
   <div class="links">
-    <%# 商品のナビゲーション - 商品が存在しない場合のエラーハンドリング %>
     <a href="<%= previous_item_path(@item) %>" class="change-item-btn">
       ＜ 前の商品
     </a>
@@ -94,8 +91,7 @@
       次の商品 ＞
     </a>
   </div>
-
-  <a href="<%= category_items_path(@item.category) %>" class="another-item"><%= @item.category.name %>の他の商品を見る</a>
+ <a href="#" class="another-item"><%= @item.category.name %>の他の商品を見る</a>
 </div>
 
 <%= render "shared/footer" %>
