@@ -7,7 +7,7 @@ RSpec.describe Item, type: :model do
 
   describe '商品出品機能' do
     context '商品を出品できる時' do
-      it 'nameとtextとcategory_idとcondition_idとshipping_idとprefecture_idとdelivery_time_idとpriceと画像があれば登録できる' do
+      it 'nameとtextとcategory_idとcondition_idとshipping_fee_idとprefecture_idとdelivery_time_idとpriceと画像があれば登録できる' do
         expect(@item).to be_valid
       end
     end
@@ -44,9 +44,9 @@ RSpec.describe Item, type: :model do
       end
 
       it '配送料の負担が選択されていないと出品できない' do
-        @item.shipping_id = 1
+        @item.shipping_fee_id = 1 # ここを修正
         @item.valid?
-        expect(@item.errors.full_messages).to include 'Shipping を選択してください'
+        expect(@item.errors.full_messages).to include 'Shipping fee を選択してください'
       end
 
       it '発送元の地域が選択されていないと出品できない' do

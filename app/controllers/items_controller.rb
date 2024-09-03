@@ -5,62 +5,42 @@ class ItemsController < ApplicationController
 
   def index
     @items = Item.order(created_at: :desc)
-    Rails.logger.info("Item index accessed by #{current_user&.email || 'Guest'}")
   end
 
   def show
-    Rails.logger.info("Item #{@item.id} viewed by #{current_user&.email || 'Guest'}")
   end
 
   def new
     @item = Item.new
-    Rails.logger.info("New item creation page accessed by #{current_user.email}")
   end
 
   def create
     @item = Item.new(item_params)
     if @item.save
-      Rails.logger.info("Item #{@item.id} created successfully by #{current_user.email}")
-      redirect_to root_path, notice: t('items.create.success')
+      redirect_to root_path, notice: '商品が作成されました。'
     else
-      Rails.logger.error("Item creation failed: #{@item.errors.full_messages.join(', ')}")
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
-    # if item_already_ordered?
-    #   Rails.logger.warn("Attempt to edit already ordered item #{@item.id} by #{current_user.email}")
-    #   redirect_to root_path, alert: t('items.edit.already_ordered')
-    # else
-    #   Rails.logger.info("Item edit page accessed by #{current_user.email} for item #{@item.id}")
-    # end
+    # 編集画面の表示
   end
 
   def update
-    # 将来的に必要になる可能性があるため、コメントアウトしたコードを残しておく
-    # if item_already_ordered?
-    #   redirect_to root_path, alert: t('items.update.already_ordered')
-    # else
-    #   @item.image.attach(@item.image.blob) if params[:item][:image].blank? && @item.image.attached?
     if @item.update(item_params)
-      Rails.logger.info("Item #{@item.id} updated successfully by #{current_user.email}")
-      redirect_to item_path(@item), notice: t('items.update.success')
+      redirect_to item_path(@item), notice: '商品情報が更新されました。'
     else
-      Rails.logger.error("Item update failed: #{@item.errors.full_messages.join(', ')}")
       render :edit, status: :unprocessable_entity
     end
-    # end
   end
 
   def destroy
-    # if @item.destroy
-    #   Rails.logger.info("Item #{@item.id} destroyed by #{current_user.email}")
-    #   redirect_to root_path, notice: t('items.destroy.success')
-    # else
-    #   Rails.logger.error("Item deletion failed: #{@item.errors.full_messages.join(', ')}")
-    #   redirect_to edit_item_path(@item), alert: t('items.destroy.failure')
-    # end
+    if @item.destroy
+      redirect_to root_path, notice: '商品を削除しました。'
+    else
+      redirect_to item_path(@item), alert: '商品の削除に失敗しました。再試行してください。'
+    end
   end
 
   private
@@ -72,18 +52,14 @@ class ItemsController < ApplicationController
 
   def set_item
     @item = Item.find(params[:id])
-    Rails.logger.info("Item #{@item.id} set for processing")
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path, alert: '指定された商品が見つかりません。'
   end
 
   def authorize_item_owner
     return if current_user == @item.user
 
-    flash[:alert] = t('items.not_authorized')
-    Rails.logger.warn("Unauthorized access attempt by #{current_user.email} on item #{@item.id}")
+    flash[:alert] = 'この操作は許可されていません。'
     redirect_to root_path
   end
-
-  # def item_already_ordered?
-  #   @item.order.present?
-  # end
 end
