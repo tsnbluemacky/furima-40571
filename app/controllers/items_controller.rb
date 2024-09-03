@@ -17,9 +17,21 @@ class ItemsController < ApplicationController
   def create
     @item = Item.new(item_params)
     if @item.save
-      redirect_to @item, notice: '商品が作成されました。'
+      redirect_to root_path, notice: '商品が作成されました。'
     else
       render :new, status: :unprocessable_entity
+    end
+  end
+
+  def edit
+    # 編集画面の表示
+  end
+
+  def update
+    if @item.update(item_params)
+      redirect_to item_path(@item), notice: '商品情報が更新されました。'
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
