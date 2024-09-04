@@ -1,24 +1,26 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_item
-  before_action :redirect_if_not_allowed, only: [:index, :create]
+  before_action :set_item, only: [:index, :create]
+  before_action :check_purchase_permissions, only: [:index, :create]
 
   def index
     @order_address = OrderAddress.new
+    gon.public_key = ENV['PAYJP_PUBLIC_KEY'] # PAYJPの公開鍵をフロントエンドに渡す
   end
 
   def create
     @order_address = OrderAddress.new(order_address_params)
     if @order_address.valid?
-      if PaymentService.new(@item.price, order_address_params[:token]).process
+      begin
+        process_payment
         @order_address.save
         redirect_to root_path, notice: '購入が完了しました'
-      else
-        flash[:alert] = '決済に失敗しました。もう一度お試しください。'
-        render :index, status: :unprocessable_entity # エラーハンドリング時にindexへ戻る
+      rescue PaymentService::Error => e
+        handle_payment_error(e)
       end
     else
-      render :index, status: :unprocessable_entity # エラーハンドリング時にindexへ戻る
+      gon.public_key = ENV['PAYJP_PUBLIC_KEY']
+      render :index, status: :unprocessable_entity
     end
   end
 
@@ -28,15 +30,35 @@ class OrdersController < ApplicationController
     @item = Item.find(params[:item_id])
   end
 
+  # 購入できるかの条件をまとめてチェック
+  def check_purchase_permissions
+    if !user_signed_in?
+      redirect_to new_user_session_path
+    elsif current_user.id == @item.user_id
+      redirect_to root_path, alert: '自身の商品は購入できません。'
+    elsif @item.order.present?
+      redirect_to root_path, alert: 'この商品は既に購入されています。'
+    end
+  end
+
   def order_address_params
     params.require(:order_address).permit(:postal_code, :prefecture_id, :city, :address, :building, :phone_number).merge(
       user_id: current_user.id, item_id: @item.id, token: params[:token]
     )
   end
 
-  def redirect_if_not_allowed
-    return unless @item.order.present? || current_user.id == @item.user_id
+  def process_payment
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
+    Payjp::Charge.create(
+      amount: @item.price,
+      card: order_address_params[:token],
+      currency: 'jpy'
+    )
+  end
 
-    redirect_to root_path, alert: 'この商品は購入できません。'
+  def handle_payment_error(error)
+    Rails.logger.error("Payment failed: #{error.message}")
+    flash[:alert] = "決済に失敗しました: #{error.message}"
+    render :index, status: :unprocessable_entity
   end
 end
