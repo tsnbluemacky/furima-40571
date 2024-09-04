@@ -1,20 +1,24 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_item
-  before_action :redirect_if_not_allowed, only: [:new, :create]
+  before_action :redirect_if_not_allowed, only: [:index, :create]
 
-  def new
+  def index
     @order_address = OrderAddress.new
   end
 
   def create
     @order_address = OrderAddress.new(order_address_params)
     if @order_address.valid?
-      pay_item
-      @order_address.save
-      redirect_to root_path, notice: '購入が完了しました'
+      if PaymentService.new(@item.price, order_address_params[:token]).process
+        @order_address.save
+        redirect_to root_path, notice: '購入が完了しました'
+      else
+        flash[:alert] = '決済に失敗しました。もう一度お試しください。'
+        render :index, status: :unprocessable_entity # エラーハンドリング時にindexへ戻る
+      end
     else
-      render :new
+      render :index, status: :unprocessable_entity # エラーハンドリング時にindexへ戻る
     end
   end
 
@@ -33,15 +37,6 @@ class OrdersController < ApplicationController
   def redirect_if_not_allowed
     return unless @item.order.present? || current_user.id == @item.user_id
 
-    redirect_to root_path
-  end
-
-  def pay_item
-    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
-    Payjp::Charge.create(
-      amount: @item.price,
-      card: order_address_params[:token],
-      currency: 'jpy'
-    )
+    redirect_to root_path, alert: 'この商品は購入できません。'
   end
 end

@@ -1,14 +1,18 @@
 Rails.application.routes.draw do
   devise_for :users
-  
+
   root 'items#index'
-  
-  # 必要なアクションを定義
+
+  # 商品出品、詳細表示、購入機能のアクションを定義
   resources :items do
-    resources :orders, only: [:new, :create, :destroy] # ここで orders のルートを追加
+    # 出品機能: newアクションで出品フォームを表示
+    # 購入機能: indexで購入確認ページ、createで購入処理
+    resources :orders, only: [:index, :create]
   end
 
-  # カテゴリとブランドのルートを一旦削除（現時点で使わないため）
-  # resources :categories, only: [:index, :show]
-  # resources :brands, only: [:index, :show]
+  # カテゴリとブランドのルーティング
+  resources :categories, only: [:index, :show]
+  resources :brands, only: [:index, :show]
+
+  # 必要に応じて他のリソースも追加可能
 end
