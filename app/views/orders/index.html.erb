@@ -5,20 +5,25 @@
     <h1 class='transaction-title-text'>
       購入内容の確認
     </h1>
+
     <%# 購入内容の表示 %>
     <div class='buy-item-info'>
-      <%= image_tag @item.image, class: 'buy-item-img' if @item.image.attached? %>
+      <%# 商品画像が添付されていない場合の代替表示 %>
+      <%= image_tag @item.image.attached? ? url_for(@item.image) : "default-item.png", class: 'buy-item-img' %>
       <div class='buy-item-right-content'>
         <h2 class='buy-item-text'>
           <%= @item.name %>
         </h2>
         <div class='buy-item-price'>
-          <p class='item-price-text'>¥<%= number_to_currency(@item.price, unit: '', precision: 0) %></p>
-         <p class='item-price-sub-text'><%= @item.shipping_fee.name %></p>
+          <p class='item-price-text'>
+            ¥<%= number_to_currency(@item.price, unit: '', precision: 0) %>
+          </p>
+          <p class='item-price-sub-text'>
+            <%= @item.shipping_fee.name %> <!-- 配送料負担の表示 -->
+          </p>
         </div>
       </div>
     </div>
-    <%# /購入内容の表示 %>
 
     <%# 支払額の表示 %>
     <div class='item-payment'>
@@ -29,12 +34,13 @@
         ¥<%= number_to_currency(@item.price, unit: '', precision: 0) %>
       </p>
     </div>
-    <%# /支払額の表示 %>
 
-    <%= form_with model: @order_address, id: 'charge-form', class: 'transaction-form-wrap', local: true do |f| %>
+    <%# 決済フォーム %>
+    <%= form_with model: @order_address, url: item_orders_path(@item), id: 'charge-form', class: 'transaction-form-wrap', local: true do |f| %>
+
     <%# カード情報の入力 %>
     <div class='credit-card-form'>
-      <h1 class='info-input-haedline'>
+      <h1 class='info-input-headline'>
         クレジットカード情報入力
       </h1>
       <div class="form-group">
@@ -67,11 +73,10 @@
         <div id="cvc-form" class="input-default"></div>
       </div>
     </div>
-    <%# /カード情報の入力 %>
-    
+
     <%# 配送先の入力 %>
     <div class='shipping-address-form'>
-      <h1 class='info-input-haedline'>
+      <h1 class='info-input-headline'>
         配送先入力
       </h1>
       <div class="form-group">
@@ -117,11 +122,14 @@
         <%= f.text_field :phone_number, class:"input-default", id:"phone-number", placeholder:"例）09012345678",maxlength:"11"%>
       </div>
     </div>
-    <%# /配送先の入力 %>
+
+    <%# フォームの送信ボタン %>
     <div class='buy-btn'>
-      <%= f.submit "購入" ,class:"buy-red-btn", id:"button" %>
+      <%= f.submit "購入", class: "buy-red-btn", id: "button" %>
     </div>
+
     <% end %>
   </div>
 </div>
-<%= render "shared/second-footer"%>
+
+<%= render "shared/second-footer" %>
