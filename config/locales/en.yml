@@ -1,33 +1,76 @@
-# Files in the config/locales directory are used for internationalization
-# and are automatically loaded by Rails. If you want to use locales other
-# than English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# The following keys must be escaped otherwise they will not be retrieved by
-# the default I18n backend:
-#
-# true, false, on, off, yes, no
-#
-# Instead, surround them with single quotes.
-#
-# en:
-#   "true": "foo"
-#
-# To learn more, please read the Rails Internationalization guide
-# available at https://guides.rubyonrails.org/i18n.html.
-
 en:
-  hello: "Hello world"
+  activerecord:
+    attributes:
+      user:
+        confirmation_sent_at: "Password confirmation email sent at"
+        confirmation_token: "Confirmation token"
+        confirmed_at: "Confirmed at"
+        created_at: "Account created at"
+        current_password: "Current password"
+        current_sign_in_at: "Last sign-in at"
+        current_sign_in_ip: "Last sign-in IP address"
+        email: "Email address"
+        encrypted_password: "Encrypted password"
+        failed_attempts: "Failed login attempts"
+        last_sign_in_at: "Last sign-in at"
+        last_sign_in_ip: "Last sign-in IP address"
+        locked_at: "Account locked at"
+        password: "Password"
+        password_confirmation: "Password confirmation"
+        remember_created_at: "Remember created at"
+        sign_in_count: "Sign-in count"
+        updated_at: "Updated at"
+    models:
+      user: "User"
+
+  devise:
+    confirmations:
+      confirmed: "Your email address has been successfully confirmed."
+      new:
+        resend_confirmation_instructions: "Resend confirmation instructions"
+      send_instructions: "You will receive an email with instructions on how to confirm your account in a few minutes."
+      send_paranoid_instructions: "If your email address exists in our database, you will receive a confirmation email in a few minutes."
+    failure:
+      already_authenticated: "You are already logged in."
+      inactive: "Your account is not activated yet. Please check your email."
+      invalid: "%{authentication_keys} or password is incorrect."
+      last_attempt: "One more failed attempt will lock your account."
+      locked: "Your account is locked."
+      not_found_in_database: "%{authentication_keys} or password is incorrect."
+      timeout: "Your session expired. Please log in again."
+      unauthenticated: "You need to log in or sign up before continuing."
+      unconfirmed: "You need to confirm your email address before continuing."
+    passwords:
+      new:
+        forgot_your_password: "Forgot your password?"
+        send_me_reset_password_instructions: "Send me reset password instructions"
+      updated: "Your password has been successfully changed."
+      updated_not_active: "Your password has been changed, but your account is not activated yet."
+    registrations:
+      new:
+        sign_up: "Sign up"
+      signed_up: "Your account has been successfully created."
+      signed_up_but_inactive: "Your account has been created but is not yet activated."
+      update_needs_confirmation: "You need to confirm your new email address. A confirmation link has been sent."
+      updated: "Your account has been successfully updated."
+    sessions:
+      new:
+        sign_in: "Sign in"
+      signed_in: "Signed in successfully."
+      signed_out: "Signed out successfully."
+
+  errors:
+    messages:
+      already_confirmed: "This email address has already been confirmed. Please log in."
+      confirmation_period_expired: "The confirmation period has expired. Please request a new confirmation email."
+      not_found: "No record found."
+      expired: "This link has expired. Please request a new one."
+      not_saved:
+        one: "There was an error saving %{resource}."
+        other: "%{count} errors prevented %{resource} from being saved."
+      invalid_postal_code: "Postal code is invalid. Please include a hyphen."
+      invalid_prefecture: "Please select a prefecture."
+      blank_city: "City is required."
+      blank_address: "Address is required."
+      invalid_phone_number: "Phone number must be 10 to 11 digits."
+      blank_token: "Credit card information is required."
