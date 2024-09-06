@@ -1,3 +1,4 @@
+# app/models/order_address.rb
 class OrderAddress
   include ActiveModel::Model
   attr_accessor :postal_code, :prefecture_id, :city, :address, :building, :phone_number, :user_id, :item_id, :token
@@ -10,42 +11,54 @@ class OrderAddress
     validates :address, presence: { message: I18n.t('errors.messages.blank_address') }
     validates :phone_number, format: { with: /\A\d{10,11}\z/, message: I18n.t('errors.messages.invalid_phone_number') }
     validates :token, presence: { message: I18n.t('errors.messages.blank_token') }
-    validates :user_id, :item_id
+    validates :user_id, :item_id, presence: true
   end
 
-  # トランザクションでOrderとAddressを同時に保存
+  # メインの保存処理
   def save
     ActiveRecord::Base.transaction do
-      order = create_order
-      create_address(order.id)
+      order = create_order!
+      create_address!(order.id)
     end
-    true
   rescue ActiveRecord::RecordInvalid => e
-    handle_error(e) # エラーが発生した場合のエラーハンドリング
+    log_error("Order saving failed", e)
+    add_validation_errors(e.record.errors)
+    false
+  rescue Payjp::CardError => e
+    log_payment_error(e)
     false
   end
 
   private
 
-  # Orderを作成するメソッド
-  def create_order
-    Order.create!(user_id:, item_id:)
+  # Orderを作成する
+  def create_order!
+    Order.create!(user_id: user_id, item_id: item_id, token: token)
   end
 
-  # Addressを作成するメソッド
-  def create_address(order_id)
-    Address.create!(postal_code:, prefecture_id:, city:, address:,
-                    building:, phone_number:, order_id:)
+  # Addressを作成する
+  def create_address!(order_id)
+    Address.create!(
+      postal_code: postal_code, prefecture_id: prefecture_id, city: city,
+      address: address, building: building, phone_number: phone_number, order_id: order_id
+    )
   end
 
-  # エラーハンドリングとログ出力を統合
-  def handle_error(exception)
-    Rails.logger.error "Purchase failed: #{exception.message}"
-    errors.add(:base, I18n.t('errors.messages.transaction_failed'))
+  # エラーログを出力
+  def log_error(message, exception)
+    Rails.logger.error "#{message}: #{exception.message}"
+  end
 
-    # 例外が発生したフィールドごとのエラーメッセージを追加
-    exception.record.errors.each do |attr, message|
-      errors.add(attr, message)
+  # 決済エラーログ
+  def log_payment_error(exception)
+    Rails.logger.error "Payment failed: #{exception.message}"
+    errors.add(:base, "決済に失敗しました: #{exception.message}")
+  end
+
+  # バリデーションエラーをエラーメッセージに追加
+  def add_validation_errors(error_messages)
+    error_messages.each do |attribute, message|
+      errors.add(attribute, message)
     end
   end
 end

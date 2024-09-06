@@ -11,15 +11,7 @@ class OrdersController < ApplicationController
   def create
     @order_address = OrderAddress.new(order_address_params)
     if @order_address.valid?
-      begin
-        process_payment
-        @order_address.save
-        redirect_to root_path, notice: '購入が完了しました'
-      rescue Payjp::CardError => e
-        handle_payment_error(e)
-      rescue StandardError => e
-        handle_payment_error(e)
-      end
+      handle_purchase(@order_address) # 購入処理をサービスクラスに委任
     else
       gon.public_key = ENV['PAYJP_PUBLIC_KEY']
       render :index, status: :unprocessable_entity
@@ -47,25 +39,12 @@ class OrdersController < ApplicationController
     )
   end
 
-  # 決済処理
-  def process_payment
-    # PAYJPの秘密鍵を環境変数から読み込む
-    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
-
-    # 決済のためのチャージ処理
-    Payjp::Charge.create(
-      amount: @item.price, # 商品の価格を設定
-      card: order_address_params[:token], # フロントエンドから送られたカードトークン
-      currency: 'jpy' # 日本円での決済
-    )
-  end
-
-  # 決済エラー処理
-  def handle_payment_error(error)
-    # エラーメッセージをログに残す
-    Rails.logger.error("Payment failed: #{error.message}")
-    # ユーザーにエラーメッセージを表示
-    flash[:alert] = "決済に失敗しました: #{error.message}"
+  # 購入処理をサービスオブジェクトに委譲
+  def handle_purchase(order_address)
+    PurchaseService.new(order_address, @item).process
+    redirect_to root_path, notice: '購入が完了しました'
+  rescue PaymentError => e
+    flash[:alert] = e.message
     render :index, status: :unprocessable_entity
   end
 end
