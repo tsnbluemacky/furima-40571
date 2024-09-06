@@ -50,7 +50,7 @@ class OrdersController < ApplicationController
   # 決済処理
   def process_payment
     # PAYJPの秘密鍵を環境変数から読み込む
-    Payjp.api_key = ENV.fetch('PAYJP_SECRET_KEY') { raise 'PAYJP_SECRET_KEY is not set in the environment variables' }
+    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
 
     # 決済のためのチャージ処理
     Payjp::Charge.create(

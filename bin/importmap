@@ -1,2 +1,4 @@
-pin "application", preload: true
-pin "price", to: "price.js"
+#!/usr/bin/env ruby
+
+require_relative "../config/application"
+require "importmap/commands"
