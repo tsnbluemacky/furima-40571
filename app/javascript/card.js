@@ -1,4 +1,5 @@
 const pay = () => {
+  console.log("ok")
   console.log(gon.public_key);  // 公開鍵が正しく渡されているかを確認
   console.log(Payjp); // Payjpオブジェクトが正しく読み込まれたか確認
 
