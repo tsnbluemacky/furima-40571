@@ -11,12 +11,6 @@ module FurimaR735733
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
 
-    # 日本語をデフォルトロケールに設定
-    config.i18n.default_locale = :ja
-
-    # I18nのロードパスを追加
-    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
-
     # ActiveStorageで画像処理をMiniMagickで行う設定
     config.active_storage.variant_processor = :mini_magick
 
