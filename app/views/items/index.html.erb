@@ -139,9 +139,12 @@
                   <%= image_tag("default_image.png", class: "item-img", alt: "デフォルト画像") %>
                 <% end %>
                 
-                  <div class='sold-out'>
-                    <span>Sold Out!!</span>
-                  </div>
+<% if item.order.present? %>
+  <div class='sold-out'>
+    <span>Sold Out!!</span>
+  </div>
+<% end %>
+
                 
               </div>
               <div class='item-info'>

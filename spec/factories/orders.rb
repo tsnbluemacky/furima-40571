@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :order do
-    price { 3000 }
-    token { 'tok_abcdefghijk00000000000000000' }
+    token { 'tok_abcdefghijk00000000000000000' } # テスト用のトークン
+    association :user # User モデルの関連付け
+    association :item # Item モデルの関連付け
   end
 end
