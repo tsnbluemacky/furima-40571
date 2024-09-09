@@ -1,13 +1,10 @@
 const pay = () => {
-  console.log("ok")
+  console.log("ok");
   console.log(gon.public_key);  // 公開鍵が正しく渡されているかを確認
-  console.log(Payjp); // Payjpオブジェクトが正しく読み込まれたか確認
 
   // 公開鍵の取得と存在確認
   const publicKey = gon.public_key;
   if (!publicKey) {
-    console.error("公開鍵が取得できませんでした。");
-    alert("システムエラーが発生しました。後ほど再度お試しください。");
     return;
   }
 
@@ -16,19 +13,14 @@ const pay = () => {
   const elements = payjp.elements();
 
   // カード情報入力フィールドの作成
-  const formElements = {
-    numberElement: elements.create('cardNumber'),
-    expiryElement: elements.create('cardExpiry'),
-    cvcElement: elements.create('cardCvc')
-  };
+  const numberElement = elements.create('cardNumber');
+  const expiryElement = elements.create('cardExpiry');
+  const cvcElement = elements.create('cardCvc');
 
   // カード入力フィールドをDOMにマウント
-  const initializePaymentForm = (formElements) => {
-    const { numberElement, expiryElement, cvcElement } = formElements;
-    numberElement.mount('#number-form');
-    expiryElement.mount('#expiry-form');
-    cvcElement.mount('#cvc-form');
-  };
+  numberElement.mount('#number-form');
+  expiryElement.mount('#expiry-form');
+  cvcElement.mount('#cvc-form');
 
   // エラーメッセージのリセット処理
   const resetErrors = (errorElement) => {
@@ -50,9 +42,7 @@ const pay = () => {
   };
 
   // トークン生成成功時の処理
-  const handleTokenCreation = (token, formElements, form) => {
-    const { numberElement, expiryElement, cvcElement } = formElements;
-
+  const handleTokenCreation = (token, form) => {
     const tokenInput = `<input value="${token}" name="token" type="hidden">`;
     form.insertAdjacentHTML("beforeend", tokenInput);
 
@@ -66,34 +56,32 @@ const pay = () => {
   };
 
   // トークン生成のリクエスト
-  const createToken = (payjp, numberElement, errorElement) => {
+  const createToken = (payjp, errorElement) => {
     return payjp.createToken(numberElement).then((response) => {
       if (response.error) {
         handleError(response.error.message, errorElement);
-        throw new Error(response.error.message); // エラーをスローしてキャッチする
+        throw new Error(response.error.message);
       }
       return response.id;
     });
   };
 
   // フォーム送信時の処理
-  const handleFormSubmit = (event, payjp, formElements, form) => {
-    event.preventDefault(); // ページリロードを防止
+  const handleFormSubmit = (event, form) => {
+    event.preventDefault();
     const errorElement = document.getElementById('card-errors');
     resetErrors(errorElement); // エラーをリセット
 
-    createToken(payjp, formElements.numberElement, errorElement)
-      .then(token => handleTokenCreation(token, formElements, form))
+    createToken(payjp, errorElement)
+      .then((token) => handleTokenCreation(token, form))
       .catch(() => handleError('トークンの作成に失敗しました。再度お試しください。', errorElement));
   };
 
-  // 支払いフォームの初期化
-  initializePaymentForm(formElements);
-
+  // フォーム送信イベントの設定
   const form = document.getElementById('charge-form');
-  form.addEventListener('submit', (event) => handleFormSubmit(event, payjp, formElements, form));
+  form.addEventListener('submit', (event) => handleFormSubmit(event, form));
 };
 
-// Turboフレームワークに対応
+
 window.addEventListener("turbo:load", pay);
-window.addEventListener("turbo:render", pay);
+

@@ -24,7 +24,6 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    # 編集画面の表示
   end
 
   def update

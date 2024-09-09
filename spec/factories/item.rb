@@ -11,9 +11,9 @@ FactoryBot.define do
     price { 1000 }
     association :user
 
-    before(:create) do |item|
-      item.image.attach(io: File.open(Rails.root.join('spec', 'fixtures', 'files', 'test_image.png')),
-                        filename: 'test_image.png', content_type: 'image/png')
+    # 画像の添付
+    after(:build) do |item|
+      item.image.attach(io: File.open(Rails.root.join('spec', 'fixtures', 'files', 'test_image.png')), filename: 'test_image.png', content_type: 'image/png')
     end
   end
 end

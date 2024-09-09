@@ -1,5 +1,6 @@
+# app/models/item.rb
 class Item < ApplicationRecord
-  has_one_attached :image # ActiveStorageで画像を管理
+  has_one_attached :image
   has_one :order
 
   extend ActiveHash::Associations::ActiveRecordExtensions
@@ -20,13 +21,12 @@ class Item < ApplicationRecord
     validates :price, numericality: {
       only_integer: true,
       greater_than_or_equal_to: 300,
-      less_than_or_equal_to: 9_999_999,
-      message: '販売可能価格外です'
+      less_than_or_equal_to: 9_999_999
     }
     validates :shipping_fee_id, :category_id, :condition_id, :delivery_time_id,
-              numericality: { other_than: 1, message: 'を選択してください' }
+              numericality: { other_than: 1 }
     validates :prefecture_id,
-              numericality: { other_than: 0, message: 'を選択してください' }
+              numericality: { other_than: 0 }
   end
 
   # 商品が売れているかを判断するメソッド

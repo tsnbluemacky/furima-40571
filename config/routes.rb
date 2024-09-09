@@ -9,10 +9,4 @@ Rails.application.routes.draw do
     # 購入機能: indexで購入確認ページ、createで購入処理
     resources :orders, only: [:index, :create]
   end
-
-  # カテゴリとブランドのルーティング
-  resources :categories, only: [:index, :show]
-  resources :brands, only: [:index, :show]
-
-  # 必要に応じて他のリソースも追加可能
 end
