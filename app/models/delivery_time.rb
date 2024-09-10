@@ -1,4 +1,3 @@
-# app/models/delivery_time.rb
 class DeliveryTime < ActiveHash::Base
   self.data = [
     { id: 1, name: '---' },
