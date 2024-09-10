@@ -6,10 +6,16 @@ require "rails/all"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Furima40571
+module FurimaR735733
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
+
+    # ActiveStorageで画像処理をMiniMagickで行う設定
+    config.active_storage.variant_processor = :mini_magick
+
+    # PayJPの公開鍵を環境変数から設定
+    config.x.api_key = ENV['PAYJP_PUBLIC_KEY']
 
     # Configuration for the application, engines, and railties goes here.
     #

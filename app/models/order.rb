@@ -1,4 +1,6 @@
 class Order < ApplicationRecord
-  # belongs_to :item
-  # 他の関連やバリデーションをここに追加
+  attr_accessor :token
+  belongs_to :user
+  belongs_to :item
+  has_one :address
 end

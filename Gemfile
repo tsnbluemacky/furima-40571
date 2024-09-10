@@ -25,6 +25,12 @@ gem 'devise'
 # モデル関連のユーティリティ
 gem 'active_hash'
 
+# データをJavaScriptに渡すためのGem
+gem 'gon'
+
+# クレカ決済用のGem
+gem 'payjp'
+
 # 開発環境およびテスト環境用のGem
 group :development, :test do
   gem 'rspec-rails', '~> 5.0.0'

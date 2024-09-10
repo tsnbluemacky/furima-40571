@@ -1,4 +1,3 @@
-# spec/factories/items.rb
 FactoryBot.define do
   factory :item do
     name { 'Test Item' }
@@ -9,11 +8,9 @@ FactoryBot.define do
     prefecture_id { 2 }
     delivery_time_id { 2 }
     price { 1000 }
-    association :user
-
+    association :user  # userと関連付け
     after(:build) do |item|
-      item.image.attach(io: File.open(Rails.root.join('spec', 'fixtures', 'files', 'test_image.png')),
-                        filename: 'test_image.png', content_type: 'image/png')
+      item.image.attach(io: File.open('public/images/f64084f8fde7075970b2bee612cfacc5.png'), filename: 'f64084f8fde7075970b2bee612cfacc5.png')
     end
   end
 end
