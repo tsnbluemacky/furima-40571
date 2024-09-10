@@ -1,6 +1,4 @@
 const pay = () => {
-  console.log("ok");
-  console.log(gon.public_key);  // 公開鍵が正しく渡されているかを確認
 
   // 公開鍵の取得と存在確認
   const publicKey = gon.public_key;
@@ -84,4 +82,4 @@ const pay = () => {
 
 
 window.addEventListener("turbo:load", pay);
-
+window.addEventListener("turbo:render", pay);
