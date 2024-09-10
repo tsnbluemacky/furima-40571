@@ -5,7 +5,7 @@ const price = () => {
 
   if (priceInput) {
     priceInput.addEventListener("input", () => {
-      const inputValue = parseFloat(priceInput.value) || 0;
+      const inputValue = Math.floor(parseFloat(priceInput.value)) || 0;  // 小数点以下を無効にする
 
       if (inputValue >= 300 && inputValue <= 9999999) {
         const tax = Math.floor(inputValue * 0.1);  // 10%の手数料を計算
