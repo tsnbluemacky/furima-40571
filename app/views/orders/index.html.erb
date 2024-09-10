@@ -37,16 +37,8 @@
       </p>
     </div>
 
-    <%# エラーメッセージの表示 %>
-    <% if @order_address.errors.any? %>
-      <div id="error_explanation">
-        <ul>
-          <% @order_address.errors.full_messages.uniq.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+<%# エラーメッセージの表示 %>
+    <%= render 'shared/error_messages', model: @order_address %>
 
     <%# 決済フォーム %>
     <%= form_with model: @order_address, url: item_orders_path(@item), id: 'charge-form', class: 'transaction-form-wrap', local: true do |f| %>
