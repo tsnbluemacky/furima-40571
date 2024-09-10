@@ -50,6 +50,7 @@ test:
 #
 production:
   <<: *default
-  database: furima_40571_production
-  username: furima_40571
-  password: <%= ENV["FURIMA_40571_DATABASE_PASSWORD"] %>
+  adapter: postgresql  # MySQLからPostgreSQLに変更
+  encoding: unicode    # PostgreSQLの設定に変更
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  url: <%= ENV['DATABASE_URL'] %>  # 環境変数DATABASE_URLで接続情報を指定
