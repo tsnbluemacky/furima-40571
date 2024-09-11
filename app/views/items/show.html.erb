@@ -18,7 +18,7 @@
 
     <div class="item-price-box">
       <span class="item-price">
-        ¥ <%= number_to_currency(@item.price, unit: "¥", format: "%n", delimiter: ",") %> <!-- 商品価格を表示 -->
+        ¥ <%= @item.price.floor.to_s(:delimited) %> <!-- 小数点以下を切り捨て、カンマ区切りで価格を表示 -->
       </span>
       <span class="item-postage">
         <%= @item.shipping_fee.name %> <!-- 配送料負担を表示 -->
