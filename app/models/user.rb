@@ -10,13 +10,15 @@ class User < ApplicationRecord
   KANA_REGEX = /\A[ァ-ヶー]+\z/
 
   validates :nickname, presence: true
-  validates :password, format: { with: PASSWORD_REGEX }
+  # Ensure passwords include both letters and numbers using half-width characters
+  validates :password, format: { with: PASSWORD_REGEX, message: 'は半角英数字で入力してください' }
 
   with_options presence: true do
     validates :first_name, format: { with: NAME_REGEX}
     validates :last_name, format: { with: NAME_REGEX}
-    validates :first_name_kana, format: { with: KANA_REGEX}
-    validates :last_name_kana, format: { with: KANA_REGEX}
+    # Validate phonetic name fields are full-width katakana characters
+    validates :first_name_kana, format: { with: KANA_REGEX, message: 'は全角カタカナで入力してください'}
+    validates :last_name_kana, format: { with: KANA_REGEX, message: 'は全角カタカナで入力してください'}
     validates :birth_date
   end
 end
